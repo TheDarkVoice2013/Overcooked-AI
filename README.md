@@ -2,7 +2,7 @@
 
 This project is part of Anton Mihai Cosmin's Research project in 2023. The project uses the scripts found at https://github.com/HumanCompatibleAI. 
 In order to check this project, you can copy paste the only file over it's counterpart and apply any changes required to fix any version problems that might have appeared.
-The version used for this specific project can be found at
+The version used for this specific project can be found at https://github.com/HumanCompatibleAI/overcooked_ai/commit/d4c4c9fc90daec9e4046035787908902542fba44
 
 The project is about developing a scripted AI for the game Overcooked and then evaluating it.
 
