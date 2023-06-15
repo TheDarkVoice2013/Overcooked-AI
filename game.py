@@ -1589,7 +1589,7 @@ class DummyAI:
 
     def takeAction(self, state):
 
-        if random.randint(1, 20) == 1:
+        if random.randint(1, 15) == 1:
             return Action.STAY
 
         self.computePathingFrom(self.x, self.y, False, False)
