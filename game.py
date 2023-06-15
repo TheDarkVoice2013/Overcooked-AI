@@ -1554,15 +1554,18 @@ class DummyAI:
                 if isThereDishNearMe and( self.heldObject == None or self.heldObject.name == "dish"):
                     self.behaviour = "BringPlate"
 
-            
-        if self.heldObject != None:
-            if(self.heldObject.name == "soup"):
-                self.behaviour = "DeliverSoup"
 
         if self.heldObject != None:
             if self.heldObject.name == "dish":
                 if self.behaviour != "PickUpSoup":
-                    self.behaviour = "BringPlate"
+                    self.behaviour = "BringPlate"   
+
+
+        if self.heldObject != None:
+            if(self.heldObject.name == "soup"):
+                self.behaviour = "DeliverSoup"
+
+
 
 
     def IsSoupMissingOnions(self, state, i):
