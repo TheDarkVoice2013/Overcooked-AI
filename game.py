@@ -688,14 +688,14 @@ class OvercookedGame(Game):
         return obj_dict
 
     def get_policy(self, npc_id, idx=0):
-        #print("npc_id is " + str(npc_id))
+        print("npc_id is " + str(npc_id))
         if npc_id.lower().startswith("rllib"):
             try:
                 # Loading rllib agents requires additional helpers
-                #print("Agent dir is" + str(AGENT_DIR))
+                print("Agent dir is" + str(AGENT_DIR))
                 fpath = os.path.join(AGENT_DIR, npc_id, "agent")
                 fix_bc_path(fpath)
-                #print(fpath)
+                print(fpath)
                 agent = load_agent(fpath, agent_index=idx)
                 return agent
             except Exception as e:
@@ -705,7 +705,7 @@ class OvercookedGame(Game):
         else:
             try:
                 fpath = os.path.join(AGENT_DIR, npc_id, "agent.pickle")
-                #print(fpath)
+                print(fpath)
                 with open(fpath, "rb") as f:
                     return pickle.load(f)
             except Exception as e:
@@ -827,7 +827,7 @@ class DummyAI:
 
     def __init__(self, id):
         self.id = id
-        #print("Initialization")
+        print("Initialization")
 
 
     dirs =         [[0,1],[0,-1],[1,0],[-1,0]]
@@ -875,12 +875,12 @@ class DummyAI:
                     x = xNew
                     y = yNew
                     break
-        #print([x,y])                
+        print([x,y])                
         for i in range(0, len(self.dirs)):
                 xNew = x+self.dirs[i][0]
                 yNew = y+self.dirs[i][1]
                 if self.insideBounds(xNew, yNew) and self.distances[yNew][xNew] == self.distances[y][x]-1 and self.isWalkable(xNew, yNew, False):
-                    #print(i)
+                    print(i)
                     return i
 
         #selectedDir = -1
@@ -1311,7 +1311,7 @@ class DummyAI:
         soupy = -1
 
 
-        #print ("x initial: " + str(x) + " y initial " + str(y))
+        print ("x initial: " + str(x) + " y initial " + str(y))
         if (heldObject != None and heldObject.name == "onion"):
             time = time + 1 # adding the time to perform the action of dropping the onion
             hasOnion = True
@@ -1339,7 +1339,7 @@ class DummyAI:
             counterx = bestX
             countery = bestY
             if bestX == -1:
-                #print ("crying, there is no place to put the onion")
+                print ("crying, there is no place to put the onion")
                 return [10000,1,1] # cry, there is no place to put the onion, and we cry because we hold the onion and there is nothing we can do
             time = time + closestCounter
             
@@ -1387,7 +1387,7 @@ class DummyAI:
             dishy = bestY
 
             if bestX == -1:
-                #print ("crying, there is no place to take dish from")
+                print ("crying, there is no place to take dish from")
                 return [10000,1,1] # cry
             time = time + closestDish
             
@@ -1410,7 +1410,7 @@ class DummyAI:
         bestDist = 10000
         bestX = -1
         bestY = -1
-        #self.printDistances()
+        self.printDistances()
         for i in range(0, len(self.startedSoups)):
             newX = self.startedSoups[i].position[0]
             newY = self.startedSoups[i].position[1]
@@ -1421,7 +1421,7 @@ class DummyAI:
                 bestY = newY
 
         if bestX == -1:
-            #print ("crying, there is no soup to take")
+            print ("crying, there is no soup to take")
             return [10000,1,1] # cry
 
         bestDist = 10000
@@ -1496,7 +1496,7 @@ class DummyAI:
         if timeUntilICanDeliverSoup < 5000:
             soupAtPos = state.objects[(mySoupLocation[0], mySoupLocation[1])]
             timeUntilSoupIsDone = soupAtPos.cook_time_remaining
-            #print("TIME UNTIL SOUP IS DONE IS " + str(timeUntilSoupIsDone))
+            print("TIME UNTIL SOUP IS DONE IS " + str(timeUntilSoupIsDone))
             if (mySoupLocation == allySoupLocation):
                 if (timeUntilICanDeliverSoup < timeUntilAllyCanDeliverSoup):
                     if (timeUntilICanDeliverSoup >= timeUntilSoupIsDone):
@@ -1512,8 +1512,8 @@ class DummyAI:
                         self.behaviour = "PickUpSoup"
 
 
-        #print("My time to pick and deliver soup: " + str(timeUntilICanDeliverSoup))
-        #print("Ally time to pick and deliver soup: " + str(timeUntilAllyCanDeliverSoup))
+        print("My time to pick and deliver soup: " + str(timeUntilICanDeliverSoup))
+        print("Ally time to pick and deliver soup: " + str(timeUntilAllyCanDeliverSoup))
 
         
 
@@ -1559,6 +1559,11 @@ class DummyAI:
             if(self.heldObject.name == "soup"):
                 self.behaviour = "DeliverSoup"
 
+        if self.heldObject != None:
+            if self.heldObject.name == "dish":
+                if self.behaviour != "PickUpSoup":
+                    self.behaviour = "BringPlate"
+
 
     def IsSoupMissingOnions(self, state, i):
         x=self.stoves[i][0]
@@ -1581,22 +1586,22 @@ class DummyAI:
 
     def takeAction(self, state):
 
-        if random.randint(1, 10) == 1:
+        if random.randint(1, 20) == 1:
             return Action.STAY
 
         self.computePathingFrom(self.x, self.y, False, False)
 
         if  self.heldObject == None and self.IsSoupReadyToStart(state, self.front()[0], self.front()[1]):
-            #print("doing here1")
+            print("doing here1")
             return Action.INTERACT
 
-        #print("Behavior is: " + self.behaviour)
+        print("Behavior is: " + self.behaviour)
         
         if self.behaviour == "BringOnion":
 
             if(self.heldObject == None):
                 if  self.IsSoupReadyToStart(state, self.front()[0], self.front()[1]):
-                    #print("doing here2")
+                    print("doing here2")
                     return Action.INTERACT
                 
                 bestScore = 0
@@ -1611,7 +1616,7 @@ class DummyAI:
                             targetX = x
                             targetY = y
                 if self.front()[0]== targetX and self.front()[1]==targetY:
-                    #print("doing here3")
+                    print("doing here3")
                     return Action.INTERACT
                 
                 for i in range (0, len(self.dirs)):
@@ -1633,13 +1638,13 @@ class DummyAI:
                     for y in range (0, len(self.map)):
                         for x in range (0, len(self.map[0])):
                             newScore = self.GoodOnionPlacementScore(x,y, state) 
-                            #print("Obtained " + str(newScore))
+                            print("Obtained " + str(newScore))
                             if  newScore > bestScore:
                                 bestScore = newScore
                                 targetX = x
                                 targetY = y
                     if self.front()[0]== targetX and self.front()[1]==targetY:
-                        #print("doing here4")
+                        print("doing here4")
                         return Action.INTERACT
                     
                     for i in range (0, len(self.dirs)):
@@ -1700,10 +1705,10 @@ class DummyAI:
 
 
         if self.behaviour == "PickUpSoup":
-            #self.printDistances()
+            self.printDistances()
             [timeTilSoup, soupLocation, params] =  self.TimeToPickUpAndDeliverSoup(state,self.x,self.y, self.heldObject)
             self.computePathingFrom(self.x, self.y, False, False)
-            #print ([timeTilSoup, soupLocation, params])
+            print ([timeTilSoup, soupLocation, params])
 
             if self.heldObject != None and self.heldObject.name == "onion":
                 targetX = params[0][1][0]
@@ -1717,7 +1722,7 @@ class DummyAI:
                 targetX = soupLocation[0]
                 targetY = soupLocation[1]
 
-            #print ("Target for delivery is " + str(targetX) + " " + str(targetY))
+            print ("Target for delivery is " + str(targetX) + " " + str(targetY))
 
             if self.front()[0]== targetX and self.front()[1]==targetY:
                 return Action.INTERACT
@@ -1725,7 +1730,7 @@ class DummyAI:
             for i in range (0, len(self.dirs)):
                 if self.x + self.dirs[i][0] == targetX and self.y+self.dirs[i][1] == targetY:
                     return self.actionFromDir(i)
-            #print("we got here...")
+            print("we got here...")
             return self.oppositeActionFromDir(self.getDirectionTo(targetX,targetY))
         
         if self.behaviour == "DeliverSoup":
@@ -1735,7 +1740,7 @@ class DummyAI:
             for y in range (0, len(self.map)):
                 for x in range (0, len(self.map[0])):
                     newScore = self.GoodSoupPlacementScore(x,y, state) 
-                    #print("Obtained " + str(newScore))
+                    print("Obtained " + str(newScore))
                     if  newScore > bestScore:
                         bestScore = newScore
                         targetX = x
@@ -1811,22 +1816,22 @@ class DummyAI:
         self.initialization()
         self.takeVariablesFromState(state)
 
-        #for x in range (0, len(self.map)):
-            #print (self.map[x])
+        for x in range (0, len(self.map)):
+            print (self.map[x])
         
-        #print("Tking action knowing " + str(state))
+        print("Tking action knowing " + str(state))
 
 
         self.computePathingFrom(self.x, self.y)
         self.checkObjects(state)
         
-        #print("STARTED SOUPS:")
-        #print(self.startedSoups)
+        print("STARTED SOUPS:")
+        print(self.startedSoups)
 
         self.decideMyBehaviour(state)
         
         action = self.takeAction(state)
-        #print("Doing " + str(action)) 
+        print("Doing " + str(action)) 
 
         
 
