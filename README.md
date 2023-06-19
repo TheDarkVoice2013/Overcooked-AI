@@ -10,3 +10,6 @@ The project is about developing a scripted AI for the game Overcooked and then e
 The use200ScoreStopSoup parameter found at the top of the file can change between the two modes.
 If set to true, the game will stop once the score 200 is set, and the tick value will be printed in the logs.
 If set to false, the timer will run until the end, and the number of ticks will still be printed (this can be useful to see that 1 second is 6 ticks)
+
+
+Most of the modified code can be found in DummyAI class.
